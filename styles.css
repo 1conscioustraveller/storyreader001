@@ -1,0 +1,118 @@
+:root {
+  --pad: clamp(12px, 3vw, 24px);
+  --textMax: 52ch;
+  --veilTop: 1;             /* 0 = off, 1 = on via JS if needed */
+  --fontScale: 1;           /* A−/A+ adjusts this */
+}
+html, body {
+  height: 100%;
+  background: #000;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  color: #fff;
+}
+.screen {
+  position: relative;
+  min-height: 100svh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+/* Base visual layer */
+.visual {
+  position: absolute; inset: 0;
+  background: #111 center/cover no-repeat;
+}
+.visual img, .visual canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
+/* Legibility veil (gradient only where text lives) */
+.veil {
+  pointer-events: none;
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(0,0,0, calc(0.35 * var(--veilTop))) 0%,
+      rgba(0,0,0, calc(0.50 * var(--veilTop))) 35%,
+      rgba(0,0,0, calc(0.50 * var(--veilTop))) 65%,
+      rgba(0,0,0, calc(0.20 * var(--veilTop))) 100%);
+  transition: opacity .25s ease;
+}
+
+/* Text stack */
+.text {
+  position: absolute;
+  inset: auto var(--pad) var(--pad) var(--pad);
+  top: var(--pad);
+  display: flex; flex-direction: column; gap: clamp(10px, 2.4vw, 16px);
+  max-width: var(--textMax);
+  z-index: 2;
+  transform: translateZ(0);
+  font-size: calc(1rem * var(--fontScale));
+  text-shadow: 0 2px 10px rgba(0,0,0,.45);
+}
+.en { font-weight: 600; font-size: calc(1.06rem * var(--fontScale)); line-height: 1.45; }
+.loc { font-weight: 400; opacity: .95; line-height: 1.45; }
+.loc .tag { opacity: .8; margin-left: .4em; font-size: .9em; }
+
+/* Micro-controls */
+.controls {
+  position: absolute; inset: var(--pad) var(--pad) auto auto;
+  display: flex; gap: 8px; z-index: 3;
+}
+.btn {
+  -webkit-tap-highlight-color: transparent;
+  display: grid; place-items: center;
+  width: 42px; height: 42px; border: 0; border-radius: 999px;
+  background: rgba(0,0,0,.35);
+  color: #fff; font: inherit;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.bottom-left {
+  position: absolute; left: var(--pad); bottom: var(--pad); z-index: 3;
+  display: flex; gap: 8px;
+}
+
+/* Auto-hide helper: add .hidden-chrome on idle */
+.hidden-chrome .controls,
+.hidden-chrome .bottom-left { opacity: 0; pointer-events: none; }
+.hidden-chrome .text { opacity: .98; } /* keep text */
+.fade { transition: opacity .25s ease; }
+
+/* Page indicator */
+.page-indicator {
+  position: absolute;
+  bottom: var(--pad);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 3;
+}
+.page-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: background 0.3s ease;
+}
+.page-dot.active {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+@media (orientation: landscape) {
+  .text { max-width: 60ch; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
