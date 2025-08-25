@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>The Lost Kite - Children's Story</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="screen" id="screen">
+    <div class="visual" id="visual">
+      <canvas id="stage"></canvas>
+    </div>
+
+    <div class="veil fade" id="veil" aria-hidden="true"></div>
+
+    <section class="text fade" aria-label="Story text" aria-live="polite">
+      <p class="en" id="p-en">One sunny morning, Mia ran to the park.</p>
+      <p class="loc" id="p-loc">
+        Una mañana soleada, Mia corrió al parque.
+        <span class="tag" aria-hidden="true">ES</span>
+      </p>
+    </section>
+
+    <div class="controls fade" role="group" aria-label="Actions">
+      <button class="btn" id="btn-lang" aria-label="Change language">🌐</button>
+      <button class="btn" id="btn-prev" aria-label="Previous page">◀</button>
+      <button class="btn" id="btn-next" aria-label="Next page">▶</button>
+      <button class="btn" id="btn-save" aria-label="Save image">⤓</button>
+    </div>
+
+    <div class="bottom-left fade">
+      <button class="btn" id="btn-smaller" aria-label="Smaller text">A−</button>
+      <button class="btn" id="btn-bigger" aria-label="Larger text">A+</button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
